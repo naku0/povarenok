@@ -1,0 +1,148 @@
+<home-button></home-button>
+<div class="recipe-page">
+  @if (recipe$ | async; as recipe) {
+    <mat-card class="recipe-card">
+      <div class="recipe-content">
+        <div class="recipe-info">
+          <mat-card-header>
+            <div mat-card-avatar class="recipe-avatar">
+              <mat-icon>restaurant</mat-icon>
+            </div>
+            <mat-card-title class="recipe-title">{{ recipe.name }}</mat-card-title>
+            <mat-card-subtitle>
+              <span class="category-badge">{{ recipe.category }}</span>
+              @if (recipe.cuisine) {
+                <span class="cuisine-badge">{{ recipe.cuisine }} кухня</span>
+              }
+              <span class="difficulty-badge" [class]="'difficulty-' + recipe.difficulty">
+                {{ recipe.difficulty }}
+              </span>
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          @if (recipe.imageUrl) {
+            <div class="image-wrapper">
+              <img mat-card-image [src]="recipe.imageUrl" [alt]="recipe.name" class="recipe-image">
+            </div>
+          } @else {
+            <div class="no-image">
+              <mat-icon>no_photography</mat-icon>
+              <span>Нет изображения</span>
+            </div>
+          }
+
+          <mat-card-content>
+            <p class="recipe-description">{{ recipe.description }}</p>
+
+            @if (recipe.tags && recipe.tags.length > 0) {
+              <div class="recipe-tags">
+                <mat-icon>sell</mat-icon>
+                @for (tag of recipe.tags; track tag) {
+                  <span class="tag">{{ tag }}</span>
+                }
+              </div>
+            }
+
+            <div class="recipe-stats">
+              <div class="stat-item">
+                <mat-icon>schedule</mat-icon>
+                <span>{{ recipe.totalTime }} мин</span>
+              </div>
+              <div class="stat-item">
+                <mat-icon>people</mat-icon>
+                <span>{{ recipe.servings }} порций</span>
+              </div>
+
+            </div>
+
+            <div class="recipe-author">
+              <mat-icon>person</mat-icon>
+              <a class="author-link" href="/user/{{recipe.authorId}}">Автор: {{ recipe.authorName }}</a>
+            </div>
+          </mat-card-content>
+        </div>
+
+        <div class="recipe-steps">
+          <mat-accordion class="ingredients-section">
+            <mat-expansion-panel expanded>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon>list</mat-icon>
+                  Ингредиенты
+                </mat-panel-title>
+                <mat-panel-description>
+                  {{ recipe.ingredients.length }} ингредиентов
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <div class="ingredients-list">
+                @for (ingredient of recipe.ingredients; track ingredient.id) {
+                  <div class="ingredient-item">
+                    <span class="ingredient-amount">
+                      {{ ingredient.amount }} {{ ingredient.unit }}
+                    </span>
+                    <span class="ingredient-name">{{ ingredient.name }}</span>
+                  </div>
+                }
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <mat-accordion class="steps-section">
+            <mat-expansion-panel expanded>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon>menu_book</mat-icon>
+                  Способ приготовления
+                </mat-panel-title>
+                <mat-panel-description>
+                  {{ recipe.steps.length }} шагов
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <div class="steps-list">
+                @for (step of recipe.steps; track step.stepNumber) {
+                  <div class="step-item">
+                    <div class="step-header">
+                      <span class="step-number">Шаг {{ step.stepNumber }}</span>
+                      @if (step.duration) {
+                        <span class="step-duration">
+                          <mat-icon>timer</mat-icon>
+                          {{ step.duration }} мин
+                        </span>
+                      }
+                    </div>
+                    <p class="step-instruction">{{ step.instruction }}</p>
+                  </div>
+                }
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+
+      <mat-card-actions>
+
+        <button mat-button>
+          <mat-icon>share</mat-icon>
+          Поделиться
+        </button>
+        @if (flag$ | async) {
+          <button mat-button color="accent" (click)="goToChange(recipe.id)">
+            <mat-icon>edit</mat-icon>
+            Редактировать
+          </button>
+          <button mat-button color="accent" (click)="openDialog(recipe.id)">
+            <mat-icon>delete</mat-icon>
+            Удалить
+          </button>
+        }
+      </mat-card-actions>
+    </mat-card>
+  } @else {
+    <div class="loading">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Загрузка рецепта...</p>
+    </div>
+  }
+</div>

@@ -1,0 +1,53 @@
+<div class="form-wrapper">
+    <h1>Вход в аккаунт</h1>
+    <div class="loginForm">
+
+      <mat-form-field>
+        <mat-label>Введите ваш email</mat-label>
+        <input
+          matInput
+          placeholder="johnDoe@gmail.com"
+          [formControl]="email"
+          (blur)="updateEmailErrorMessage()"
+          required/>
+        @if (email.invalid) {
+          <mat-error>{{ errorMail() }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Введите пароль</mat-label>
+        <input
+          [type]="hide() ? 'password' : 'text'"
+          matInput
+          placeholder="******"
+          [formControl]="password"
+          (blur)="updatePasswordErrorMessage()"
+          required/>
+        <button
+          matIconButton matSuffix
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide Password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (password.invalid) {
+          <mat-error>{{ errorPswd() }}</mat-error>
+        }
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        matButton="filled"
+        (click)="isFormValid() && onSubmit()"
+        [disabled]="!isFormValid">
+        Войти
+      </button>
+
+    </div>
+    <div class="login-link">
+      Еще нет аккаунта? <a href="/register">Зарегестрироваться</a>
+    </div>
+  </div>
+

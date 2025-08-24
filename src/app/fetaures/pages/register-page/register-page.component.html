@@ -1,0 +1,94 @@
+<div class="form-wrapper">
+  <h1>Регистрация</h1>
+  <div class="registerForm">
+    <mat-form-field>
+      <mat-label>Введите ваш email</mat-label>
+      <input
+        matInput
+        placeholder="johnDoe@gmail.com"
+        [formControl]="email"
+        (blur)="updateEmailErrorMessage()"
+        required/>
+      @if (email.invalid) {
+        <mat-error>{{ errorMail() }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Введите username</mat-label>
+      <input
+        matInput
+        placeholder="username"
+        [formControl]="username"
+        (blur)="updateUsernameError()"
+        required
+      />
+      @if (username.invalid) {
+        <mat-error>{{ errorUsername() }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Введите пароль</mat-label>
+      <input
+        [type]="hide() ? 'password' : 'text'"
+        matInput
+        placeholder="******"
+        [formControl]="password"
+        (blur)="updatePasswordErrorMessage()"
+        required/>
+      <button
+        matIconButton matSuffix
+        (click)="clickEvent($event)"
+        [attr.aria-label]="'Hide Password'"
+        [attr.aria-pressed]="hide()"
+      >
+        <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      @if (password.invalid) {
+        <mat-error>{{ errorPswd() }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Пароль ещё раз</mat-label>
+      <input
+        [type]="hide() ? 'password' : 'text'"
+        matInput
+        placeholder="******"
+        [formControl]="secondPswd"
+        (blur)="updateScndPswdError()"
+        required/>
+      <button
+        matIconButton matSuffix
+        (click)="clickEvent($event)"
+        [attr.aria-label]="'Hide Password'"
+        [attr.aria-pressed]="hide()"
+      >
+        <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      @if (secondPswd.invalid) {
+        <mat-error>{{ errorScndPswd() }}</mat-error>
+      }
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      matButton="filled"
+      (click)="isFormValid() && onSubmit()"
+      [disabled]="!isFormValid">
+      Регистрация
+    </button>
+  </div>
+
+
+  <div class="login-link">
+    Уже есть аккаунт? <a href="/login">Войти</a>
+  </div>
+</div>
+
+<div class="back-button">
+  <button matFab aria-label="back to homepage" matTooltip="На главную страницу" (click)="this.router.navigate(['/'])">
+    <mat-icon>home</mat-icon>
+  </button>
+</div>

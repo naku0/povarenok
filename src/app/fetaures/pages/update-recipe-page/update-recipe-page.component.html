@@ -1,0 +1,13 @@
+@if (recipe$ | async; as recipe) {
+  <recipe-form
+    [recipe]="recipe"
+    (formSubmitted)="handleSubmit($event)"
+    (cancelled)="handleCancel()">
+  </recipe-form>
+} @else {
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+    <p>Загрузка рецепта...</p>
+  </div>
+}
+

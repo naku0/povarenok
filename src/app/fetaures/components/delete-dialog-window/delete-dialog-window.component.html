@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Вы точно хотите удалить этот рецепт?</h2>
+<mat-dialog-content>Это действие нельзя отменить.</mat-dialog-content>
+<mat-dialog-actions>
+  <button matFab extended [mat-dialog-close] = false>
+    <mat-icon>cancel</mat-icon>
+    Отмена
+  </button>
+  <button matFab extended [mat-dialog-close] = true class="delete">
+    <mat-icon>delete</mat-icon>
+    Удалить
+  </button>
+</mat-dialog-actions>

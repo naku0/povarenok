@@ -1,0 +1,13 @@
+mat-dialog-actions{
+  display: flex;
+  gap:8px;
+}
+
+.delete{
+  color: #dc2626;
+  background-color: #f8fafc;
+&:hover{
+  color: #f8fafc;
+  background-color: #dc2626;
+}
+}

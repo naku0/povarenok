@@ -1,0 +1,284 @@
+<div>
+  @if (user$ | async; as user) {
+    <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="recipe-form">
+      <h1 class="form-title">Добавить рецепт в книгу</h1>
+      <mat-tab-group class="form-tabs">
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>info</mat-icon>
+              Основное
+            </div>
+          </ng-template>
+
+          <div class="form-section">
+            <div class="input-row">
+              <div class="input-container">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Название рецепта</mat-label>
+                  <input matInput formControlName="name" placeholder="Введите название">
+                  @if (hasError('name')) {
+                    <mat-error>{{ getError('name') }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="input-container">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Категория</mat-label>
+                  <mat-select formControlName="category">
+                    <mat-option value="завтрак">Завтрак</mat-option>
+                    <mat-option value="обед">Обед</mat-option>
+                    <mat-option value="ужин">Ужин</mat-option>
+                    <mat-option value="десерт">Десерт</mat-option>
+                    <mat-option value="закуска">Закуска</mat-option>
+                  </mat-select>
+                  @if (hasError('category')) {
+                    <mat-error>{{ getError('category') }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="input-row">
+
+              <div class="input-container">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Кухня</mat-label>
+                  <input matInput formControlName="cuisine" placeholder="Национальная кухня">
+                </mat-form-field>
+              </div>
+
+              <div class="input-container">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Теги (через запятую)</mat-label>
+                  <input matInput formControlName="tags" placeholder="шоколад, выпечка, сладкое">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="input-row">
+              <div class="input-container">
+                <div class="pic-wrapper">
+                  @if (imageUrl) {
+                    <img [src]="imageUrl" alt="Картинка вашего блюда!">
+                  }
+                </div>
+                <div class="pic-buttons">
+                  <input type="file" (change)="handlePicChange($event.target!.files)" id="add-pic" accept="image/*">
+                  <button matFab extended (click)="document.getElementById('add-pic')?.click()">
+                    <mat-icon>upload</mat-icon>
+                    Загрузить
+                  </button>
+                  @if (imageUrl) {
+                    <button matFab extended id="delete-btn" (click)="removePic()">
+                      <mat-icon>delete</mat-icon>
+                      Удалить
+                    </button>
+                  } @else {
+                    <button matFab extended disabled>
+                      <mat-icon>delete</mat-icon>
+                      Удалить
+                    </button>
+                  }
+
+                </div>
+                @if (hasPicError) {
+                  <mat-error>{{ picError }}</mat-error>
+                }
+              </div>
+              <div class="input-container">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Описание рецепта</mat-label>
+                  <textarea matInput formControlName="description" rows="1"
+                            placeholder="Краткое описание вашего рецепта"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>schedule</mat-icon>
+              Время
+            </div>
+          </ng-template>
+
+          <div class="form-section">
+            <div class="time-grid">
+              <div class="input-container">
+                <mat-form-field appearance="outline">
+                  <mat-label>Подготовка (мин)</mat-label>
+                  <input matInput type="number" formControlName="prepTime" min="0">
+                  @if (hasError('prepTime')) {
+                    <mat-error>{{ getError('prepTime') }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="input-container">
+                <mat-form-field appearance="outline">
+                  <mat-label>Приготовление (мин)</mat-label>
+                  <input matInput type="number" formControlName="cookTime" min="0">
+                  @if (hasError('cookTime')) {
+                    <mat-error>{{ getError('cookTime') }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="input-container">
+                <mat-form-field appearance="outline">
+                  <mat-label>Порции</mat-label>
+                  <input matInput type="number" formControlName="servings" min="1">
+                  @if (hasError('servings')) {
+                    <mat-error>{{ getError('servings') }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="input-container">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Сложность</mat-label>
+                <mat-select formControlName="difficulty">
+                  <mat-option value="легко">🍃 Легко</mat-option>
+                  <mat-option value="средне">⚠️ Средне</mat-option>
+                  <mat-option value="сложно">👹 Сложно</mat-option>
+                </mat-select>
+                @if (hasError('difficulty')) {
+                  <mat-error>{{ getError('difficulty') }}</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>kitchen</mat-icon>
+              Ингредиенты
+            </div>
+          </ng-template>
+
+          <div class="form-section">
+            <div class="ingredients-list">
+              <div formArrayName="ingredients">
+                @for (ingredient of ingredients.controls; track i; let i = $index) {
+                  <div [formGroupName]="i" class="ingredient-item">
+                    <div class="ingredient-fields">
+                      <mat-form-field appearance="outline" class="amount-field">
+                        <mat-label>Кол-во</mat-label>
+                        <input matInput type="number" formControlName="amount" step="0.1" min="0">
+                        @if (hasIngredientError(i, 'amount')) {
+                          <mat-error>{{ getIngredientError(i, 'amount') }}</mat-error>
+                        }
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline" class="unit-field">
+                        <mat-label>Ед.</mat-label>
+                        <mat-select formControlName="unit">
+                          @for (unit of measurementUnits; track unit) {
+                            <mat-option [value]="unit">{{ unit }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline" class="name-field">
+                        <mat-label>Ингредиент</mat-label>
+                        <input matInput formControlName="name" placeholder="Название">
+                        @if (hasIngredientError(i, 'name')) {
+                          <mat-error>{{ getIngredientError(i, 'name') }}</mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+
+                    <button mat-icon-button color="warn" (click)="removeIngredient(i)" class="delete-btn">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <button mat-stroked-button type="button" (click)="addIngredient()" class="add-btn">
+              <mat-icon>add</mat-icon>
+              Добавить ингредиент
+            </button>
+          </div>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>list</mat-icon>
+              Шаги
+            </div>
+          </ng-template>
+
+          <div class="form-section">
+            <div class="steps-list">
+              <div formArrayName="steps">
+                @for (step of steps.controls; track i; let i = $index) {
+                  <div [formGroupName]="i" class="step-item">
+                    <div class="step-header">
+                      <span class="step-number">Шаг {{ i + 1 }}</span>
+                      <button mat-icon-button color="warn" (click)="removeStep(i)" class="delete-btn">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+
+                    <div class="step-content">
+                      <mat-form-field appearance="outline" class="duration-field">
+                        <mat-label>Время (мин)</mat-label>
+                        <input matInput type="number" formControlName="duration" min="0">
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline" class="instruction-field">
+                        <mat-label>Инструкция</mat-label>
+                        <textarea matInput formControlName="instruction" rows="1"
+                                  placeholder="Опишите шаг приготовления"></textarea>
+                        @if (hasStepError(i, 'instruction')) {
+                          <mat-error>{{ getStepError(i, 'instruction') }}</mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+            <button mat-stroked-button type="button" (click)="addStep()" class="add-btn">
+              <mat-icon>add</mat-icon>
+              Добавить шаг
+            </button>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="onCancel()" class="cancel-btn">
+          Отмена
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!recipeForm.valid" class="submit-btn">
+          <mat-icon>save</mat-icon>
+          Сохранить рецепт
+        </button>
+      </div>
+    </form>
+  } @else {
+    <mat-card class="auth-card">
+      <mat-card-content>
+        <div class="not-authorized">
+          <mat-icon class="auth-icon">lock</mat-icon>
+          <h2 class="auth-title">Необходима авторизация</h2>
+          <p class="auth-description">Войдите в систему чтобы загрузить рецепт</p>
+          <button mat-raised-button color="primary" (click)="navigateToLogin()">
+            <mat-icon>login</mat-icon>
+            Войти
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

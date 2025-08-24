@@ -1,0 +1,66 @@
+<home-button></home-button>
+<div class="user-page">
+  @if (userProfile$ | async; as user) {
+    <div class="profile">
+    <div class="user-avatar">
+        <mat-icon class="avatar-icon">account_circle</mat-icon>
+      </div>
+      <div class="user-name">{{ user.displayName }}</div>
+    </div>
+
+    <mat-card-content>
+      <div class="stats-container">
+        <div class="stat-item">
+          <mat-icon class="stat-icon">restaurant_menu</mat-icon>
+          <div class="stat-content">
+            <span class="stat-number">{{ (userRecipes$ | async)?.length || 0 }}</span>
+            <span class="stat-label">Рецептов</span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <mat-icon class="stat-icon">favorite</mat-icon>
+          <div class="stat-content">
+            <span class="stat-number">0</span>
+            <span class="stat-label">Лайков</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <div class="recipes-card">
+      <h2>
+        Рецепты
+      </h2>
+
+      <mat-divider></mat-divider>
+
+      @if (userRecipes$ | async; as recipes) {
+        @if (recipes.length === 0) {
+          <div class="empty-state">
+            <mat-icon class="empty-icon">restaurant_menu</mat-icon>
+            <h3 class="empty-title">Пока нет рецептов</h3>
+            <p class="empty-description">Создайте свой первый рецепт и поделитесь им с миром!</p>
+            <button mat-raised-button color="primary" (click)="createRecipe()">
+              <mat-icon>add</mat-icon>
+              Создать рецепт
+            </button>
+          </div>
+        } @else {
+          <div class="recipes-grid">
+            @for (recipe of recipes; track recipe.id) {
+              <mini-card [recipeData]="recipe"></mini-card>
+            }
+          </div>
+        }
+      } @else {
+        <div class="loading-state">
+          <mat-spinner diameter="40"></mat-spinner>
+          <span class="loading-text">Загрузка рецептов...</span>
+        </div>
+      }
+    </div>
+  } @else {
+    <div>hello</div>
+  }
+</div>

@@ -1,0 +1,53 @@
+<header class="app-header">
+  <div class="header-content">
+    <h1 class="app-title">Рецепты</h1>
+    <div class="auth-button-wrapper">
+      @if (authService.currentUser$ | async; as user) {
+        <button mat-raised-button class="profile-btn" (click)="goToMyProfile()">
+          <mat-icon>account_circle</mat-icon>
+          Мой аккаунт
+        </button>
+        <button mat-raised-button (click)="logout()" class="auth-btn">
+          <mat-icon>logout</mat-icon>
+          Выйти
+        </button>
+      } @else {
+        <button mat-raised-button color="primary" (click)="router.navigate(['/login'])" class="login-btn">
+          <mat-icon>login</mat-icon>
+          Войти
+        </button>
+      }
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+  @if (recipes$ | async; as recipes) {
+    @if (recipes.length === 0) {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">restaurant_menu</mat-icon>
+        <h2>Пока рецептов нет</h2>
+        <p>Можете стать первым!</p>
+        <button mat-raised-button color="primary" (click)="router.navigate(['/newRecipe'])">
+          <mat-icon>add</mat-icon>
+          Создать рецепт
+        </button>
+      </div>
+    } @else {
+      <div class="cards-wrapper">
+        @for (recipe of recipes; track recipe.id) {
+          <mini-card [recipeData]="recipe"></mini-card>
+        }
+      </div>
+    }
+  } @else {
+    <div class="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Загрузка рецептов...</p>
+    </div>
+  }
+</main>
+
+<button id="add-new" mat-fab color="primary" (click)="router.navigate(['/newRecipe'])">
+  <mat-icon>add</mat-icon>
+</button>
