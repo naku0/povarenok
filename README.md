@@ -35,7 +35,7 @@ npm install
 
 3. **Перейдите в Firebase и создайте конфиг**
    
-4. **Поместите Конфиг в src/environments/envionment.ts под названием env**
+4. **Поместите Конфиг в src/environments/envionment.ts под названием env, либо обратитесь ко мне в личные сообщения**
    
 5. **Запуск**
 ```
