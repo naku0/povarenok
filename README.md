@@ -32,7 +32,12 @@ cd povarenok
 ```
 npm install
 ```
-3. **Запуск**
+
+3. **Перейдите в Firebase и создайте конфиг**
+   
+4. **Поместите Конфиг в src/environments/envionment.ts под названием env**
+   
+5. **Запуск**
 ```
 ng serve
 ```
@@ -41,3 +46,4 @@ ng serve
 ```
 http://localhost:4200
 ```
+
