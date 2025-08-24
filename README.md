@@ -36,7 +36,16 @@ npm install
 3. **Перейдите в [Firebase](https://firebase.google.com/) и создайте конфиг**
    
 4. **Поместите Конфиг в src/environments/envionment.ts под названием env, либо обратитесь ко мне в личные сообщения**
-   
+
+должно выглядеть как-то так
+```
+const env = {
+  firebase:{
+    ....
+  }
+}
+```
+ 
 5. **Запуск**
 ```
 ng serve
