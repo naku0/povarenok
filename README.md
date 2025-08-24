@@ -21,3 +21,22 @@
 
 ##  Особенности
 - CRUD представлен в виде взаимодействия с Firebase API
+
+## Запуск
+1. **Клонирование репозитория**
+```bash
+git clone https://github.com/naku0/povarenok.git
+cd povarenok
+```
+2. **Установка зависимостей**
+```
+npm install
+```
+3. **Запуск**
+```
+ng serve
+```
+#Готово! Приложение будет открыто на 
+```
+http://localhost:4200
+```
