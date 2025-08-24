@@ -120,14 +120,9 @@
           </mat-accordion>
         </div>
       </div>
+      @if (flag$ | async) {
 
-      <mat-card-actions>
-
-        <button mat-button>
-          <mat-icon>share</mat-icon>
-          Поделиться
-        </button>
-        @if (flag$ | async) {
+        <mat-card-actions>
           <button mat-button color="accent" (click)="goToChange(recipe.id)">
             <mat-icon>edit</mat-icon>
             Редактировать
@@ -136,8 +131,9 @@
             <mat-icon>delete</mat-icon>
             Удалить
           </button>
-        }
-      </mat-card-actions>
+        </mat-card-actions>
+      }
+
     </mat-card>
   } @else {
     <div class="loading">
